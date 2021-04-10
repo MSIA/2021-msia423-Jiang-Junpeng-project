@@ -1,4 +1,4 @@
-# MSiA423 Template Repository
+# MSiA423 Steam Recommender
 
 Author: Junpeng Jiang
 QA: Hao Xu
@@ -22,17 +22,29 @@ QA: Hao Xu
 
 <!-- tocstop -->
 
-## Project Charter
+## Project Charter: Steam Recommender
 
 ### Vision
 
+Steam is a digital video game library for users to purchase, download and play games on PC/labtops. It started in September 2003 as software platform to update games for valve (steam's parent company) but gradually expanded to include a variaty of games from third-party game producers. As of the end of 2020, there are more than 10,000 games released on steam world wide and certainly it has become the most prevalent game hub for game enthusiasts on PC.
+In steam, each user possesses a game library profile that records of all the games purchased, time played, achievements acquired and etc. Whether you are a experienced video gamer or just new to steam, you would always wonder what game to play next and how long you will spend in the next game on steam . Hopefully, this web app recommender can help you find and enjoy your next favorite game on steam.
+
 ### Mission
+
+The primary data source for this project should contain a complete list of games on steams and their related features. The dataset I am currently considering is from kaggle(https://www.kaggle.com/nikdavis/steam-store-games). However, since this is not the mosted updated game library, I might also consider scrap data from steam using API services such as [StorefrontAPI](https://wiki.teamfortress.com/wiki/User:RJackson/StorefrontAPI/) or [SteamSpy](https://steamspy.com/about/).
+
+The users will enter their game profile on steam or game preference if they have not acquired a profile to start. These inputs should include the name of the games purchase, time played, date of purchase, price paid, and interest in looking for the next game to play. The recommender will return a list of games (and steam urls) based on an evaluation of the input information and records in the game library dataset. Additionally, the recommender will output estimates of  the time users will play in these games.
+
 
 ### Success Criteria
 
 #### Machine Learning Metric
 
+The primary method for this recommender will be content based filtering/clustering, and the wep app should take different similary metrics into consideration when making recommendations. Before the wep app goes live, we should look at F-statistic/Silhouette-statitics if implementing clustering methods. Since we will not have users' data, we will be able to cross validate the recommendations. However, after the app launches, it is possible to trach the click through rate and conversion rate as an estimate of whether a users likes the recommendations. Based on these estimates, we can calculate the precision/recall/ROC/mRR(mean reciprocal rank) to evalutation the recommender.
+
 #### Business Metric
+
+From a business perspective, their are mainly two metrics to evaluate the performance of the webapp, the click throught rate and the conversion rate. Specifically, we can measure the number of times a user would click the recommended games' urls and track if they consider these recommendations as viable options. Similarly, it's also important to track if these recommendations actually make a user to purchase the games. These metric will be strong indications of the effectiveness of the recommendations and they are directly related to steam's revenue and user acquisition.
 
 ## Directory structure 
 
