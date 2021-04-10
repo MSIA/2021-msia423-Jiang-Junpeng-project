@@ -4,7 +4,7 @@ Author: Junpeng Jiang
 QA: Hao Xu
 
 <!-- toc -->
-
+- [Project Charter](#project_charter)
 - [Directory structure](#directory-structure)
 - [Running the app](#running-the-app)
   * [1. Initialize the database](#1-initialize-the-database)
@@ -21,6 +21,18 @@ QA: Hao Xu
   * [Workaround for potential Docker problem for Windows.](#workaround-for-potential-docker-problem-for-windows)
 
 <!-- tocstop -->
+
+## Project Charter
+
+### Vision
+
+### Mission
+
+### Success Criteria
+
+#### Machine Learning Metric
+
+#### Business Metric
 
 ## Directory structure 
 
