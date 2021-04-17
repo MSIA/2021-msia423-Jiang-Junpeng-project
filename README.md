@@ -1,6 +1,7 @@
 # MSiA423 Steam Recommender
 
 Author: Junpeng Jiang
+
 QA: Hao Xu
 
 <!-- toc -->
