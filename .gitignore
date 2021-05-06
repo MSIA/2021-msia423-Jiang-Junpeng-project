@@ -6,10 +6,12 @@ __pycache__/
 .idea/
 .log
 .ipynb_checkpoints/
-
+.awsconfig
+.mysqlconfig
 
 data/*
 !data/sample/
 !data/external/
+!data/steamdata/
 config/local
 !.gitkeep
