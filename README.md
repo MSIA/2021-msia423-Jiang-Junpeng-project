@@ -158,76 +158,67 @@ python app.py
 
 You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
 
-## Running the app in Docker 
+## Mid Check Point Tutorial
+
+### 0. Connect to Northwestern vpn
 
 ### 1. Build the image 
 
-The Dockerfile for running the flask app is in the `app/` folder. To build the image, run from this directory (the root of the repo): 
+`cd` into the top level of this project's repository
 
 ```bash
- docker build -f app/Dockerfile -t pennylane .
+ docker build -t steam .
 ```
 
-This command builds the Docker image, with the tag `pennylane`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
+This command builds the Docker image, with the tag `steam`, based on the instructions in `Dockerfile` and the files existing in this directory.
  
-### 2. Run the container 
+### 2. Uploading Raw Data to S3 Bucket
 
-To run the app, run from this directory: 
+#### 2.1 Raw Data Aquirement and Setup
+For this project, I am using datasets from https://www.kaggle.com/nikdavis/steam-store-games. You can use this link to access the original data source and manually download it using the download button on the upper right corner.
 
-```bash
-docker run -p 5000:5000 --name test pennylane
-```
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
+After downloading the compressed file, you shuold un-zip it and store the 6 raw steam_xxx.csv files to your local directory.
 
-This command runs the `pennylane` image as a container named `test` and forwards the port 5000 from container to your laptop so that you can access the flask app exposed through that port. 
-
-If `PORT` in `config/flaskconfig.py` is changed, this port should be changed accordingly (as should the `EXPOSE 5000` line in `app/Dockerfile`)
-
-### 3. Kill the container 
-
-Once finished with the app, you will need to kill the container. To do so: 
+Before start uploading, you should configure your environment variables as follows: 
 
 ```bash
-docker kill test 
+export AWS_ACCESS_KEY_ID=<Your Access Key ID>
+
+export AWS_SECRET_ACCESS_KEY=<Your Secret Key ID>
 ```
 
-where `test` is the name given in the `docker run` command.
+Alternatively, you can create a `.awsconfig` file at your local repository and store your `AWS_ACCESS_KEY_ID` and your `AWS_SECRET_ACCESS_KEY`. You can `source .awsconfig` when you want to use AWS related services.
 
-### Example using `python3` as an entry point
-
-We have included another example of a Dockerfile, `app/Dockerfile_python` that has `python3` as the entry point such that when you run the image as a container, the command `python3` is run, followed by the arguments given in the `docker run` command after the image name. 
-
-To build this image: 
-
+#### 2.2 Uploading Files to S3 Bucket Using run.py
 ```bash
- docker build -f app/Dockerfile_python -t pennylane .
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY steam run.py upload --s3path='s3://2021-msia423-firstname-lastname/to/path' --local_path='local/path'
 ```
 
-then run the `docker run` command: 
-
+Example:
 ```bash
-docker run -p 5000:5000 --name test pennylane app.py
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY steam run.py upload --s3path='s3://2021-msia423-jiang-junpeng/raw/steamspy_tag_data.csv' --local_path='data/steamdata/steamspy_tag_data.csv'
+```
+### 3. Create RDS 
+
+#### 3.1 Introduction and Setup
+
+At this time I have created one table named `steam`. This table combines information from all 6 raw data files. I may add more relational tables as the project progresses.
+
+You should set up your database connect configurations before the next steps. You can type the following in the console:
+```bash
+export MYSQL_USER="Your_username"
+export MYSQL_PASSWORD="Your_password"
+export MYSQL_HOST="nw-msia423-jjp3451.czalnmqkpupo.us-east-1.rds.amazonaws.com"
+export MYSQL_PORT="3306"
+export DATABASE_NAME="msia423_db"
 ```
 
-The new image defines the entry point command as `python3`. Building the sample PennyLane image this way will require initializing the database prior to building the image so that it is copied over, rather than created when the container is run. Therefore, please **do the step [Create the database with a single song](#create-the-database-with-a-single-song) above before building the image**.
-
-# Testing
-
-From within the Docker container, the following command should work to run unit tests when run from the root of the repository: 
+Alternatively, you can create a `.mysqlconfig` file at your local repository and store your configs. You can `source .mysqlconfig` when you want to use AWS related services.
+ 
+#### 3.2 Create RDS Table `steam` using run.py
 
 ```bash
-python -m pytest
-``` 
-
-Using Docker, run the following, if the image has not been built yet:
-
-```bash
- docker build -f app/Dockerfile_python -t pennylane .
+docker run -e MYSQL_USER -e MYSQL_PASSWORD -e MYSQL_PORT -e DATABASE_NAME -e MYSQL_HOST steam run.py create_db
 ```
 
-To run the tests, run: 
-
-```bash
- docker run penny -m pytest
-```
  
