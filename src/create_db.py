@@ -11,16 +11,24 @@ logger.setLevel("INFO")
 Base = declarative_base()
 
 
-def generate_engine_string():
-    conn_type = "mysql+pymysql"
-    user = os.environ.get("MYSQL_USER")
-    password = os.environ.get("MYSQL_PASSWORD")
-    host = os.environ.get("MYSQL_HOST")
-    port = os.environ.get("MYSQL_PORT")
-    database = os.environ.get("DATABASE_NAME")
-    engine_string = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, database)
+def generate_engine_string(SQLALCHEMY_DATABASE_URI):
+    DB_HOST = os.environ.get('MYSQL_HOST')
+    DB_PORT = os.environ.get('MYSQL_PORT')
+    DB_USER = os.environ.get('MYSQL_USER')
+    DB_PW = os.environ.get('MYSQL_PASSWORD')
+    DATABASE = os.environ.get('DATABASE_NAME')
+    DB_DIALECT = 'mysql+pymysql'
 
-    return engine_string
+    if SQLALCHEMY_DATABASE_URI is not None:
+        pass
+    elif DB_HOST is None:
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///data/steam.db'
+    else:
+        SQLALCHEMY_DATABASE_URI = '{dialect}://{user}:{pw}@{host}:{port}/{db}'.format(dialect=DB_DIALECT, user=DB_USER,
+                                                                                      pw=DB_PW, host=DB_HOST,
+                                                                                      port=DB_PORT,
+                                                                                      db=DATABASE)
+    return SQLALCHEMY_DATABASE_URI
 
 
 class Steam(Base):
@@ -49,8 +57,8 @@ class Steam(Base):
         return '<Steam %r>' % self.name
 
 
-def create_db():
-    engine_string = generate_engine_string()
+def create_db(real_engine_string):
+    engine_string = generate_engine_string(real_engine_string)
     # set up mysql connection
     engine = sql.create_engine(engine_string)
 

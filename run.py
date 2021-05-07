@@ -21,12 +21,14 @@ if __name__ == '__main__':
                         help="Where to load data to in S3")
 
     sb_create_db = subparsers.add_parser("create_db", description="Create tables in database")
+    sb_create_db.add_argument("--engine_string", default=None,
+                           help="SQLAlchemy connection URI for database")
 
     args = parser.parse_args()
     sp_used = args.subparser_name
     if sp_used == 'upload':
         upload_file_to_s3(args.local_path, args.s3path)
     elif sp_used == 'create_db':
-        create_db()
+        create_db(args.engine_string)
     else:
         parser.print_help()
