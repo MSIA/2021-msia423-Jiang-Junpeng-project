@@ -121,7 +121,7 @@ Alternatively, you can create a `.awsconfig` file at your local repository and s
 
 #### 2.2 Uploading Files to S3 Bucket Using run.py
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY steam run.py upload --s3path='s3://2021-msia423-firstname-lastname/to/path' --local_path='local/path'
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY steam run.py upload --s3path='s3://2021-msia423-lastname-firstname/to/path' --local_path='local/path'
 ```
 
 Example:
