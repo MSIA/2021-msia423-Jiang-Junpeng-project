@@ -12,6 +12,12 @@ Base = declarative_base()
 
 
 def generate_engine_string(SQLALCHEMY_DATABASE_URI):
+    """Generate engine_string.
+    Args:
+        SQLALCHEMY_DATABASE_URI: pased argument from run.py to specify SQLALCHEMY's path (local/RDS)
+    Returns:
+        string: engine_string to be used in create_db()
+    """
     DB_HOST = os.environ.get('MYSQL_HOST')
     DB_PORT = os.environ.get('MYSQL_PORT')
     DB_USER = os.environ.get('MYSQL_USER')
@@ -58,6 +64,12 @@ class Steam(Base):
 
 
 def create_db(real_engine_string):
+    """Function to create the database
+    Args:
+        real_engine_string: argument to specify whether to generate database locally or at RDS
+    Returns:
+        N/A
+    """
     engine_string = generate_engine_string(real_engine_string)
     # set up mysql connection
     engine = sql.create_engine(engine_string)

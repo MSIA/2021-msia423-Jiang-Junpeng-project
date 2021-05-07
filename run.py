@@ -8,7 +8,10 @@ from src.s3 import upload_file_to_s3
 from src.create_db import create_db
 
 if __name__ == '__main__':
-
+    """This if statement will parse input arguments of run.py to determine:
+        1. Whether you want to upload to s3 bucket or create database 
+        2. Whether you want to create local database or create database on RDS
+    """
     # Add parsers for both creating a database and adding songs to it
     parser = argparse.ArgumentParser(description="Upload to S3/Create DataBase")
     subparsers = parser.add_subparsers(dest='subparser_name')

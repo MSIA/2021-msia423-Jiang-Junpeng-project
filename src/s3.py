@@ -19,6 +19,12 @@ logger = logging.getLogger('s3')
 
 
 def parse_s3(s3path):
+    """Parse s3 path. Source: https://github.com/MSIA/2021-msia423/blob/main/aws-s3/s3.py
+    Args:
+        s3path : Input s3's path
+    Returns:
+        string1,string2: name of S3, path of S3 Bucket
+    """
     regex = r"s3://([\w._-]+)/([\w./_-]+)"
 
     m = re.match(regex, s3path)
@@ -29,7 +35,13 @@ def parse_s3(s3path):
 
 
 def upload_file_to_s3(local_path, s3path):
-
+    """Upload raw data to S3 bucket.
+    Args:
+        local_path: path to local file to be uploaded
+        s3path: path to upload on S3 bucket
+    Returns:
+        None
+    """
     s3bucket, s3_just_path = parse_s3(s3path)
 
     s3 = boto3.resource("s3")
