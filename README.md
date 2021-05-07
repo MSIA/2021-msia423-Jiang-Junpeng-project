@@ -57,7 +57,7 @@ From a business perspective, their are mainly two metrics to evaluate the perfor
 ├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git. 
 │   ├── external/                     <- External data sources, usually reference data,  will be synced with git
 │   ├── sample/                       <- Sample data used for code development and testing, will be synced with git
-│
+│   ├── steamdata/                    <- Newly added raw data
 ├── deliverables/                     <- Any white papers, presentations, final work products that are presented or delivered to a stakeholder 
 │
 ├── docs/                             <- Sphinx documentation based on Python docstrings. Optional for this project. 
@@ -75,12 +75,16 @@ From a business perspective, their are mainly two metrics to evaluate the perfor
 ├── reference/                        <- Any reference material relevant to the project
 │
 ├── src/                              <- Source data for the project 
-│
+│   ├── s3.py                         <- Module used to upload file to s3.
+│   ├── create_dy.py                  <- Module used to create local/RDS databases.
 ├── test/                             <- Files necessary for running model tests (see documentation below) 
 │
 ├── app.py                            <- Flask wrapper for running the model 
 ├── run.py                            <- Simplifies the execution of one or more of the src scripts  
 ├── requirements.txt                  <- Python package dependencies 
+├── Dockerfile                        <- Dockerfile used to build docker
+
+
 ```
 
 
