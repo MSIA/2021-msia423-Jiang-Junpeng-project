@@ -156,12 +156,12 @@ docker run -e MYSQL_USER -e MYSQL_PASSWORD -e MYSQL_PORT -e DATABASE_NAME -e MYS
 
 If you don't have specified `MYSQL_HOST` environment variable in your repository, or this variable is set to `None`, you can run the command follows. This will create a local .db file to the default path `sqlite:///data/steam.db`
 
-```bash
-docker run -e MYSQL_USER -e MYSQL_PASSWORD -e MYSQL_PORT -e DATABASE_NAME -e MYSQL_HOST steam run.py create_db
+```bash 
+docker run steam run.py create_db
 ```
 
-You can also specify a path to store the created .db file by using the --engine_string argument:
+You can also specify a path to store the created .db file by using the --engine_string argument, this will create local .db file in the specified path:
 
 ```bash
-docker run -e MYSQL_USER -e MYSQL_PASSWORD -e MYSQL_PORT -e DATABASE_NAME -e MYSQL_HOST steam run.py create_db --engine_string="sqlite:///randomfolder/steam.db"
+docker run steam run.py create_db --engine_string="sqlite:///randomfolder/steam.db"
 ```
