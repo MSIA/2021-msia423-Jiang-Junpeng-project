@@ -1,41 +1,39 @@
 import argparse
 
 import logging.config
-logging.config.fileConfig('config/logging/local.conf')
-logger = logging.getLogger('penny-lane-pipeline')
 
-from src.add_songs import TrackManager, create_db
-from config.flaskconfig import SQLALCHEMY_DATABASE_URI
+logging.config.fileConfig('config/logging/local.conf')
+logger = logging.getLogger('steam-pipeline')
+
+from src.s3 import upload_file_to_s3
+from src.create_db import create_db
 
 if __name__ == '__main__':
 
+    # This if statement will parse input arguments of run.py to determine:
+    # 1. Whether you want to upload to s3 bucket or create database
+    # 2. Whether you want to create local database or create database on RDS
+
     # Add parsers for both creating a database and adding songs to it
-    parser = argparse.ArgumentParser(description="Create and/or add data to database")
+    parser = argparse.ArgumentParser(description="Upload to S3/Create DataBase")
     subparsers = parser.add_subparsers(dest='subparser_name')
 
-    # Sub-parser for creating a database
-    sb_create = subparsers.add_parser("create_db", description="Create database")
-    sb_create.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
-                           help="SQLAlchemy connection URI for database")
+    # Sub-parser for uploading files to s3
+    sb_s3 = subparsers.add_parser("upload", description="Upload files to s3")
+    sb_s3.add_argument('--s3path', default="s3://2021-msia423-jiang-junpeng/raw/newdata.csv", action="store",
+                       help="If used, upload raw data to s3 bucket")
+    sb_s3.add_argument('--local_path', default="data/steamdata/steam.csv", action="store",
+                       help="Where to load data to in S3")
 
-    # Sub-parser for ingesting new data
-    sb_ingest = subparsers.add_parser("ingest", description="Add data to database")
-    sb_ingest.add_argument("--artist", default="Emancipator", help="Artist of song to be added")
-    sb_ingest.add_argument("--title", default="Minor Cause", help="Title of song to be added")
-    sb_ingest.add_argument("--album", default="Dusk to Dawn", help="Album of song being added")
-    sb_ingest.add_argument("--engine_string", default='sqlite:///data/tracks.db',
-                           help="SQLAlchemy connection URI for database")
+    sb_create_db = subparsers.add_parser("create_db", description="Create tables in database")
+    sb_create_db.add_argument("--engine_string", default=None,
+                              help="SQLAlchemy connection URI for database")
 
     args = parser.parse_args()
     sp_used = args.subparser_name
-    if sp_used == 'create_db':
+    if sp_used == 'upload':
+        upload_file_to_s3(args.local_path, args.s3path)
+    elif sp_used == 'create_db':
         create_db(args.engine_string)
-    elif sp_used == 'ingest':
-        tm = TrackManager(engine_string=args.engine_string)
-        tm.add_track(args.title, args.artist, args.album)
-        tm.close()
     else:
         parser.print_help()
-
-
-
