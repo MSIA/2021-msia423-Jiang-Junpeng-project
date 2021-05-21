@@ -5,17 +5,16 @@ import logging
 import os
 
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 Base = declarative_base()
 
 
-def generate_engine_string(SQLALCHEMY_DATABASE_URI):
+def generate_engine_string(engine_string):
     """Generate engine_string.
     Args:
-        SQLALCHEMY_DATABASE_URI: pased argument from run.py to specify SQLALCHEMY's path (local/RDS)
+        engine_string (string): pased argument from run.py to specify SQLALCHEMY's path (local/RDS)
     Returns:
-        string: engine_string to be used in create_db()
+        engine_string (string): engine_string to be used in create_db()
     """
     DB_HOST = os.environ.get('MYSQL_HOST')
     DB_PORT = os.environ.get('MYSQL_PORT')
@@ -24,16 +23,16 @@ def generate_engine_string(SQLALCHEMY_DATABASE_URI):
     DATABASE = os.environ.get('DATABASE_NAME')
     DB_DIALECT = 'mysql+pymysql'
 
-    if SQLALCHEMY_DATABASE_URI is not None:
+    if engine_string is not None:
         pass
     elif DB_HOST is None:
-        SQLALCHEMY_DATABASE_URI = 'sqlite:///data/steam.db'
+        engine_string = 'sqlite:///data/steam.db'
     else:
-        SQLALCHEMY_DATABASE_URI = '{dialect}://{user}:{pw}@{host}:{port}/{db}'.format(dialect=DB_DIALECT, user=DB_USER,
+        engine_string = '{dialect}://{user}:{pw}@{host}:{port}/{db}'.format(dialect=DB_DIALECT, user=DB_USER,
                                                                                       pw=DB_PW, host=DB_HOST,
                                                                                       port=DB_PORT,
                                                                                       db=DATABASE)
-    return SQLALCHEMY_DATABASE_URI
+    return engine_string
 
 
 class Steam(Base):
@@ -65,7 +64,7 @@ class Steam(Base):
 def create_db(real_engine_string):
     """Function to create the database
     Args:
-        real_engine_string: argument to specify whether to generate database locally or at RDS
+        real_engine_string (string): argument to specify whether to generate database locally or at RDS
     Returns:
         N/A
     """
