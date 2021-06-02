@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        h3 {text-align: center;}
+        .center {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 50%;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <title>Steam Recommender</title>
+</head>
+
+<body>
+    <h3>
+         Steam Game Recommender About Page
+    </h3>
+
+    <a href="{{ url_for('home') }}" align="middle">
+        <img src="{{url_for('static', filename='images.jpeg')}}" alt="Steam Logo" style="width:200px;height:100px;" class = 'center'>
+    </a>
+
+    <header>
+    <h2>Author & Organization</h2>
+    <p>Author: Junpeng Jiang</p>
+    <p>Organization: Northwester University Master of Science in Analytics</p>
+    </header>
+
+    <header>
+    <h2>Introduction</h2>
+    <p>This web app will recommend the user available games on steam based on games the user is interested or played before. Users can enter the name of a game in the list shown below and specify the price of the recommended games they would like to see (optional). The app will recommend up to 5 games based on similarities between games. </p>
+    </header>
+
+    <div style="text-align: center">
+    <a href="{{ url_for('gamenames') }}" >Game list</a>
+    </div>
+</body>
+</html>

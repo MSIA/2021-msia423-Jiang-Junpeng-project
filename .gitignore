@@ -15,3 +15,5 @@ data/*
 !data/steamdata/
 config/local
 !.gitkeep
+
+copilot
