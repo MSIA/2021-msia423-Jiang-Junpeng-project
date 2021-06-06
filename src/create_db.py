@@ -40,31 +40,6 @@ def generate_engine_string(engine_string):
     return engine_string
 
 
-# class Steam(Base):
-#     """Create a data model for the database to be set up for recording steam games """
-#     __tablename__ = 'steam'
-#
-#     appid = Column(Integer, primary_key=True)
-#     name = Column(String(200), unique=False, nullable=False)
-#     release_date = Column(DateTime, unique=False, nullable=True)
-#     english = Column(Integer, unique=False, nullable=False)
-#     developer = Column(String(200), unique=False, nullable=False)
-#     publisher = Column(String(200), unique=False, nullable=False)
-#     platforms = Column(String(200), unique=False, nullable=False)
-#     required_age = Column(Integer, unique=False, nullable=False)
-#     genres = Column(String(200), unique=False, nullable=False)
-#     steamspy_tags = Column(String(200), unique=False, nullable=False)
-#     achievements = Column(Integer, unique=False, nullable=False)
-#     positive_ratings = Column(Integer, unique=False, nullable=False)
-#     negative_ratings = Column(Integer, unique=False, nullable=False)
-#     average_playtime = Column(Integer, unique=False, nullable=False)
-#     median_playtime = Column(Integer, unique=False, nullable=False)
-#     owners = Column(String(200), unique=False, nullable=False)
-#     price = Column(Float, unique=False, nullable=False)
-#
-#     def __repr__(self):
-#         return '<Steam %r>' % self.name
-
 class Steamreal(Base):
     """Create a data model for the database to be set up for recording steam games """
     __tablename__ = 'steamreal'
@@ -95,6 +70,12 @@ def create_db(real_engine_string):
 
 
 def ingest_data(real_engine_string):
+    """Ingest data to RDS Database.
+    Args:
+        engine_string (string): pased argument from run.py to specify SQLALCHEMY's path (local/RDS)
+    Returns:
+        N/A
+    """
     entire_data = get_data()
     name_list = get_namelist(entire_data)
 

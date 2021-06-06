@@ -29,7 +29,7 @@ def index():
     if request.method == 'POST':
         user_input1 = request.form.to_dict()['game_name']
         user_input2 = request.form.to_dict()['price']
-        #print(type(user_input2))
+
         try:
             if user_input1 == "":
                 if user_input2 == "":
@@ -60,4 +60,5 @@ def gamenames():
     return render_template('gamenames.html')
 
 if __name__ == '__main__':
+    logger.info("running on: "+str(app.config["HOST"])+":"+str(app.config["PORT"]))
     app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])

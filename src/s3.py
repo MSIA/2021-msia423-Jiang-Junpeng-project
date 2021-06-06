@@ -46,10 +46,10 @@ def upload_file_to_s3(local_path, s3path):
         logger.info('Data uploaded from %s to %s', local_path, s3path)
 
 def download_file_from_s3(local_path, s3path):
-    """Upload raw data to S3 bucket.
+    """Download files S3 bucket.
     Args:
-        local_path (string): path to store downloaded file
-        s3path (string): path to get s3 file
+        local_path (string): path to download file from s3 bucket
+        s3path (string): path of download files from s3 bucket
     Returns:
         None
     """
@@ -63,5 +63,5 @@ def download_file_from_s3(local_path, s3path):
     except botocore.exceptions.NoCredentialsError:
         logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
     else:
-        logger.info('Data uploaded from %s to %s', local_path, s3path)
+        logger.info('Data downloaded from %s to %s', s3path, local_path)
 
