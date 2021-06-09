@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template, request, redirect, url_for
 
 # Initialize the Flask application
+
 app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
 
 # Configure flask app from flask_config.py
@@ -16,45 +17,63 @@ logger = logging.getLogger(app.config["APP_NAME"])
 logger.debug('Web app log')
 
 # Initialize the database session
-from src.add_songs import Tracks, TrackManager
-track_manager = TrackManager(app)
+from src.create_db import Steamreal, SteamManager
 
+steam_manager = SteamManager(app)
+
+
+# create Home page
 @app.route('/')
+def home():
+    return render_template('home.html')
+
+
+# Create main search page
+@app.route('/', methods=['POST'])
 def index():
-    """Main view that lists songs in the database.
+    if request.method == 'POST':
+        user_input1 = request.form.to_dict()['game_name']
+        user_input2 = request.form.to_dict()['price']
 
-    Create view into index page that uses data queried from Track database and
-    inserts it into the msiapp/templates/index.html template.
+        try:
+            if user_input1 == "":
+                if user_input2 == "":
+                    return render_template('no_input.html')
+                else:
+                    steams = steam_manager.session.query(Steamreal.rec, Steamreal.price).filter(
+                        Steamreal.price <= float(user_input2) + 0.01,
+                        Steamreal.price >= float(user_input2) - 0.01).distinct().all()
+                    return render_template('search.html', steams=steams, user_input=user_input2)
+            else:
+                if user_input2 == "":
+                    steams = steam_manager.session.query(Steamreal).filter(Steamreal.searchname == user_input1).all()
+                    return render_template('index.html', steams=steams, user_input=user_input1)
+                else:
+                    steams = steam_manager.session.query(Steamreal).filter(Steamreal.searchname == user_input1,
+                                                                           Steamreal.price <= float(user_input2) + 0.01,
+                                                                           Steamreal.price >= float(
+                                                                               user_input2) - 0.01).all()
+                    return render_template('index.html', steams=steams, user_input=user_input1)
 
-    Returns: rendered html template
 
-    """
-
-    try:
-        tracks = track_manager.session.query(Tracks).limit(app.config["MAX_ROWS_SHOW"]).all()
-        logger.debug("Index page accessed")
-        return render_template('index.html', tracks=tracks)
-    except:
-        traceback.print_exc()
-        logger.warning("Not able to display tracks, error page returned")
-        return render_template('error.html')
+        except:
+            traceback.print_exc()
+            logger.warning("Not able to display games, error page returned")
+            return render_template('error.html')
 
 
-@app.route('/add', methods=['POST'])
-def add_entry():
-    """View that process a POST with new song input
+# Create about page
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
-    :return: redirect to index page
-    """
 
-    try:
-        track_manager.add_track(artist=request.form['artist'], album=request.form['album'], title=request.form['title'])
-        logger.info("New song added: %s by %s", request.form['title'], request.form['artist'])
-        return redirect(url_for('index'))
-    except:
-        logger.warning("Not able to display tracks, error page returned")
-        return render_template('error.html')
+# Create error page
+@app.route('/gamenames')
+def gamenames():
+    return render_template('gamenames.html')
 
 
 if __name__ == '__main__':
+    logger.info("running on: " + str(app.config["HOST"]) + ":" + str(app.config["PORT"]))
     app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])
