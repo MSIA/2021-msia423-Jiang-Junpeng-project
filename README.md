@@ -204,15 +204,20 @@ Do Not source your mysql config at this point.
 #### 2.4 Ingest Data to Local Database
 `make ingest`: this will ingest data to local database `/data/steam.db`. If you are browsing this db from a sqlite app, you should see data coming in. This process will take ~30 mins.
 
+#### 2.5 Unittest
+`make testmodel`: this will run unittests for model modules.
 ### 3. Run the App Locally
 
 #### 3.0 Configure your MYSQL Config
 At this point you should source your MYSQL config `source .mysqlconfig` and the following commands will let you initiate the app and access it locally. As you import your `MYSQL_HOST`, this app will access the rds database.
 
+Note: One additional step `export SQLALCHEMY_DATABASE_URI` has been submitted through google form. Instructors should export that env variable for testing purposes.
+
 #### 3.1 Build Image for the app
 `make appimage`: this will build image for running the app.
 
 #### 3.2 Run the App
+
 `make runapp`: this will initiate the app, you should be able use it at: http://0.0.0.0:5000/
 
 This step creates a test image called `teststeam`, unless you created an image that has the exact same name (which is very unlikely), there will be no issue. Otherwise it may say `The container name "/teststeam" is already in use...`. If this happens you can remove the corresponding image and rerun `make runapp`. 

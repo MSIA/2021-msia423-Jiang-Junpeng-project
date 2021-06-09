@@ -16,5 +16,6 @@ appimage:
 	docker build --platform linux/x86_64 -f app/Dockerfile -t steam .
 
 runapp:
-	docker run -it -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e MYSQL_HOST -e MYSQL_PORT -e MYSQL_USER -e MYSQL_PASSWORD -e DATABASE_NAME -p 5000:5000 --name teststeam steam
-
+	docker run -e SQLALCHEMY_DATABASE_URI -p 5000:5000 --name teststeam steam
+testmodel:
+	docker run steam -m pytest
