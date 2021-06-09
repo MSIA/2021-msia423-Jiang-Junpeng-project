@@ -76,6 +76,8 @@ def ingest_data(real_engine_string):
     Returns:
         N/A
     """
+
+    # run the model pipeline and ingest results into rds
     entire_data = get_data()
     name_list = get_namelist(entire_data)
 
@@ -85,6 +87,7 @@ def ingest_data(real_engine_string):
     Session = sessionmaker(bind=engine)
     session = Session()
 
+    # use the subset of game names to run the pipeline and ingest results
     for search in name_list:
         data = get_data()
         subset = get_subset(search, data)
@@ -92,6 +95,7 @@ def ingest_data(real_engine_string):
         rec_list = rec_dt['name'].tolist()
         price_list = rec_dt['price'].tolist()
 
+    # zip the results to the form of rds schema
         for rec, price in zip(rec_list, price_list):
             record = Steamreal(searchname=search, rec=rec, price=price)
             session.add(record)

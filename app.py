@@ -18,12 +18,17 @@ logger.debug('Web app log')
 
 # Initialize the database session
 from src.create_db import Steamreal, SteamManager
+
 steam_manager = SteamManager(app)
 
+
+# create Home page
 @app.route('/')
 def home():
     return render_template('home.html')
 
+
+# Create main search page
 @app.route('/', methods=['POST'])
 def index():
     if request.method == 'POST':
@@ -35,14 +40,19 @@ def index():
                 if user_input2 == "":
                     return render_template('no_input.html')
                 else:
-                    steams = steam_manager.session.query(Steamreal.rec,Steamreal.price).filter(Steamreal.price<=float(user_input2)+0.01, Steamreal.price>=float(user_input2)-0.01).distinct().all()
+                    steams = steam_manager.session.query(Steamreal.rec, Steamreal.price).filter(
+                        Steamreal.price <= float(user_input2) + 0.01,
+                        Steamreal.price >= float(user_input2) - 0.01).distinct().all()
                     return render_template('search.html', steams=steams, user_input=user_input2)
             else:
                 if user_input2 == "":
-                    steams = steam_manager.session.query(Steamreal).filter(Steamreal.searchname==user_input1).all()
+                    steams = steam_manager.session.query(Steamreal).filter(Steamreal.searchname == user_input1).all()
                     return render_template('index.html', steams=steams, user_input=user_input1)
                 else:
-                    steams = steam_manager.session.query(Steamreal).filter(Steamreal.searchname==user_input1, Steamreal.price<=float(user_input2)+0.01, Steamreal.price>=float(user_input2)-0.01).all()
+                    steams = steam_manager.session.query(Steamreal).filter(Steamreal.searchname == user_input1,
+                                                                           Steamreal.price <= float(user_input2) + 0.01,
+                                                                           Steamreal.price >= float(
+                                                                               user_input2) - 0.01).all()
                     return render_template('index.html', steams=steams, user_input=user_input1)
 
 
@@ -51,14 +61,19 @@ def index():
             logger.warning("Not able to display games, error page returned")
             return render_template('error.html')
 
+
+# Create about page
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+
+# Create error page
 @app.route('/gamenames')
 def gamenames():
     return render_template('gamenames.html')
 
+
 if __name__ == '__main__':
-    logger.info("running on: "+str(app.config["HOST"])+":"+str(app.config["PORT"]))
+    logger.info("running on: " + str(app.config["HOST"]) + ":" + str(app.config["PORT"]))
     app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])

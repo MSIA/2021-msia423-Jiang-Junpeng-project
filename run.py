@@ -13,6 +13,7 @@ if __name__ == '__main__':
     # This if statement will parse input arguments of run.py to determine:
     # 1. Whether you want to upload to s3 bucket or create database
     # 2. Whether you want to create local database or create database on RDS
+    # 3. Other additional steps like ingesting the data
 
     # Add parsers for both creating a database and adding songs to it
     parser = argparse.ArgumentParser(description="Upload to S3/Create DataBase")

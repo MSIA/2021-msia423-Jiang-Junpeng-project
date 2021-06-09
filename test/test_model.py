@@ -1,7 +1,6 @@
 import pytest
 
 import pandas as pd
-import numpy as np
 
 from src.model import get_data, get_subset, get_namelist, recommend_topn
 
